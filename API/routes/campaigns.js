@@ -1,6 +1,7 @@
-const { Campaign , validate } = require('../models/campaign');
+const Campaign = require('../models/campaign').Campaign;
 const validateObjectId = require('../middlewares/validateObjectId')
 const acquireCampaign = require('../middlewares/acquireCampaign')
+const validateSchema = require('../middlewares/validateSchema')
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
@@ -20,9 +21,9 @@ router.get('/:id', validateObjectId, async (req, res) => {
 });
 
 
-router.post('/', acquireCampaign ,async (req, res) => {
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+router.post('/', [validateSchema, acquireCampaign] ,async (req, res) => {
+
+    if (req.body.category == "") return res.status(200).send('it took too much time from web service to respond');
 
     let campaign = new Campaign(req.body);
     campaign = await campaign.save();
@@ -30,15 +31,12 @@ router.post('/', acquireCampaign ,async (req, res) => {
     res.send(campaign);
 });
 
-router.put('/:id', [validateObjectId , acquireCampaign], async (req, res) => {
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
+router.put('/:id', [validateObjectId, validateSchema, acquireCampaign], async (req, res) => {
     const campaign = await Campaign.findByIdAndUpdate(req.params.id, req.body,useFindAndModify=false);
 
     if (!campaign) return res.status(404).send('The campaign with the given ID was not found.');
 
-    res.send(campaign);
+    res.send(req.body);
 });
 
 router.delete('/:id', validateObjectId, async (req, res) => {

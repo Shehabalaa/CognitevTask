@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const validate = require('../models/campaign').validate;
 
 module.exports = function (req, res, next) {
     if (!mongoose.Types.ObjectId.isValid(req.params.id))
