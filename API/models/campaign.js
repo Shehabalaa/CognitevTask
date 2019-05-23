@@ -44,3 +44,4 @@ function validateCampaign(campaign) {
 
 exports.Campaign = Campaign; 
 exports.validate = validateCampaign;
+exports.campaignSchema = campaignSchema;

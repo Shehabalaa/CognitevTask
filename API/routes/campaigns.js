@@ -28,7 +28,7 @@ router.post('/', [validateSchema, acquireCampaign] ,async (req, res) => {
     let campaign = new Campaign(req.body);
     campaign = await campaign.save();
 
-    res.send(campaign);
+    res.send("Data successfly added ");
 });
 
 router.put('/:id', [validateObjectId, validateSchema, acquireCampaign], async (req, res) => {
@@ -36,7 +36,7 @@ router.put('/:id', [validateObjectId, validateSchema, acquireCampaign], async (r
 
     if (!campaign) return res.status(404).send('The campaign with the given ID was not found.');
 
-    res.send(req.body);
+    res.send("Data successfly edited ");
 });
 
 router.delete('/:id', validateObjectId, async (req, res) => {
@@ -44,7 +44,7 @@ router.delete('/:id', validateObjectId, async (req, res) => {
 
     if (!campaign) return res.status(404).send('The campaign with the given ID was not found.');
 
-    res.send(campaign);
+    res.send("Data successfly deleted ");
 });
 
 

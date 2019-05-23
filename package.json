@@ -1,13 +1,16 @@
 {
-  "name": "CampaignManger",
-  "main": "index.js",
+  "name": "",
+  "main": "",
   "scripts": {},
   "author": "Shehab",
   "dependencies": {
+    "cors": "^2.8.5",
+    "ejs": "^2.6.1",
     "express": "^4.16.2",
     "joi": "^14.3.1",
     "mongoose": "^5.0.2",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "zingchart": "^2.8.6"
   },
   "devDependencies": {}
 }
