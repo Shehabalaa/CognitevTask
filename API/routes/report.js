@@ -6,13 +6,13 @@ const router = express.Router();
 mongoose.set('useFindAndModify', false);
 
 router.post('/', async (req, res) => {
-    let { dimentions, fields, duration } = req.body;
-    let group = dimentions.concat(fields);
+    let { dimensions, fields, duration } = req.body;
+    let group = dimensions.concat(fields);
     let groupObj = {};
 
     const { error } = Joi.validate(duration, Joi.object().keys({
-        startdate: Joi.date().required().error((e) => { return (e[0].context.limit) ? e : "start date format is YYYY-MM-DD"; }),
-        enddate: Joi.date().min(Joi.ref('startdate')).required().error((e) => { return (e[0].context.limit) ? e : "end date format is YYYY-MM-DD"; })
+        startdate: Joi.date().required().error((e) => { return (e[0].context.limit) ? e : "start date format is YYYY MM DD"; }),
+        enddate: Joi.date().min(Joi.ref('startdate')).required().error((e) => { return (e[0].context.limit) ? e : "end date format is YYYY MM DD"; })
     }));
 
     if (error) return res.status(400).send(error.details[0].message);

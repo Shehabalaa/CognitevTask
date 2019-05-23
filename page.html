@@ -291,10 +291,10 @@
         <input type="text" id="url"><br>
 
         <label for="start date">start date</label>
-        <input type="text" id="startdate"><br>
+        <input type="text" id="startdate" placeholder="YYYY MM DD"><br>
 
         <label for="end date">end date</label>
-        <input type="text" id="enddate"><br>
+        <input type="text" id="enddate" placeholder="YYYY MM DD"><br>
 
         <label for="id">campaign id</label>
         <input type="text" id="campaignID"><br>
@@ -307,7 +307,7 @@
     <input type="submit" value="delete campaign" onclick="deleteCampaigns()"><br><br><br><br> 
 
     <form>
-        <label for="">Dimentions</label><br>
+        <label for="">Dimensions</label><br>
         <input type="checkbox" name="dim" value="country"> country <br>
         <input type="checkbox" name="dim" value="goal"> goal <br>
         <input type="checkbox" name="dim" value="category"> category <br><br>
@@ -321,11 +321,11 @@
         <input type="checkbox" name="field" value="budget">budget<br><br>
 
 
-        <label for="">duration</label><br>
+        <label for="">Duration</label><br>
         <label for="start date">start date</label>
-        <input type="text" id="durationStartDate"><br>
+        <input type="text" id="durationStartDate"  placeholder="YYYY MM DD" ><br>
         <label for="end date">end date</label>
-        <input type="text" id="durationEndDate"><br><br>
+        <input type="text" id="durationEndDate" placeholder="YYYY MM DD"><br><br>
 
     </form>
 
@@ -360,7 +360,7 @@
             xhr.send(JSON.stringify(data));
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
-                    console.log(xhr.response);
+                    alert(xhr.response);
                 }
             }
 
@@ -384,7 +384,7 @@
             xhr.send(JSON.stringify(data));
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
-                    console.log(xhr.response);
+                    alert(xhr.response);
                 }
             }
 
@@ -397,7 +397,7 @@
             xhr.send();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
-                    console.log(xhr.response);
+                    alert(xhr.response);
                 }
             }
 
@@ -418,12 +418,12 @@
 
 
 
-        function getChartData(campaigns, dimentions, field) {
+        function getChartData(campaigns, dimensions, field) {
             let map = {}
             let uniqueFields = []
             campaigns.forEach(element => {
                 let dimsValues = []
-                dimentions.forEach(dim => {
+                dimensions.forEach(dim => {
                     dimsValues.push(element._id[dim])
                 });
                 let fVal = String(element._id[field]);
@@ -444,8 +444,8 @@
             Object.keys(map).forEach(function (key, index) {
                 let tmpx = "";
                 let dimVals = key.split(',')
-                for (let i = 0; i < dimentions.length; ++i) {
-                    tmpx += (dimentions.length > 1) ? dimentions[i] + ': ' + dimVals[i] + '\n' : dimentions[i] + ': ' + dimVals + '\n';
+                for (let i = 0; i < dimensions.length; ++i) {
+                    tmpx += (dimensions.length > 1) ? dimensions[i] + ': ' + dimVals[i] + '\n' : dimensions[i] + ': ' + dimVals + '\n';
                 }
                 chartData.x.values.push(tmpx.slice(0, tmpx.length - 1));
 
@@ -510,11 +510,11 @@
         }
 
         function getReport() {
-            let dimentions = [];
+            let dimensions = [];
             let items = document.getElementsByName('dim');
             for (var i = 0; i < items.length; i++) {
                 if (items[i].type == 'checkbox' && items[i].checked == true) {
-                    dimentions.push(items[i].value);
+                    dimensions.push(items[i].value);
                 }
             }
 
@@ -531,13 +531,18 @@
                 "enddate": document.getElementById('durationEndDate').value
             }
 
-            let data = { "dimentions": dimentions, "fields": fields, "duration": duration };
+            let data = { "dimensions": dimensions, "fields": fields, "duration": duration };
 
 
             let xhr = new XMLHttpRequest();
             xhr.open("POST", "http://localhost:3000/api/report");
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.send(JSON.stringify(data));
+
+            [1,2,3,4,5].forEach(element => {
+                zingchart.exec('chart'+element,'destroy');
+            });
+            
 
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
@@ -547,7 +552,7 @@
                         console.log(duration)
                         let chartID = 1;
                         fields.forEach(field => {
-                            let chartData = getChartData(campaigns, dimentions, field)
+                            let chartData = getChartData(campaigns, dimensions, field)
                             drawChart(chartData, field, chartID);
                             chartID++;
                         });

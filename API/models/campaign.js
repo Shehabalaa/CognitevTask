@@ -34,8 +34,8 @@ function validateCampaign(campaign) {
           then:Joi.string().uri().required().error(() => '\"url\" is not allowed to be empty when category is empty'),
           otherwise:Joi.string().uri().allow("")
       }),
-      startdate: Joi.date().min(startDateMin).required().error((e) => {return (e[0].context.limit)? e : "start date format is YYYY-MM-DD";}),
-      enddate: Joi.date().min(Joi.ref('startdate')).required().error((e) => {return (e[0].context.limit)? e : "end date format is YYYY-MM-DD";})
+      startdate: Joi.date().min(startDateMin).required().error((e) => {return (e[0].context.limit)? e : "start date format is YYYY MM DD";}),
+      enddate: Joi.date().min(Joi.ref('startdate')).required().error((e) => {return (e[0].context.limit)? e : "end date format is YYYY MM DD";})
     }).or('url','category');
 
     return Joi.validate(campaign, schema);
